@@ -11,7 +11,8 @@ class LoginPresenter:
 
     def handle_login(self, username: str, password: str):
         result = self.auth.login(username, password)
-        if result.ok:            
+        if result.ok:
+            #self.view.show_info(result.message)
             self.on_success(username)
         else:
             self.view.show_error(result.message)

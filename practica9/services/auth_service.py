@@ -1,10 +1,6 @@
 # services/auth_service.py
 from dataclasses import dataclass
 
-from models.UserRepository import UserRepository
-from services.unit_of_work import UnitOfWork
-from models.db import SessionLocal
-
 @dataclass(frozen=True)
 class AuthResult:
     ok: bool
@@ -20,11 +16,6 @@ class AuthService:
         self._password = valid_password
 
     def login(self, username: str, password: str) -> AuthResult:
-        
-        with UnitOfWork(SessionLocal) as uow:
-            repo = UserRepository(uow.session)
-            repo.find_by_id(1)
-            uow.commit()
         if not username or not password:
             return AuthResult(False, "Usuario y contraseña son requeridos.")
         if username == self._user and password == self._password:
