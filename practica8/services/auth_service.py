@@ -1,14 +1,15 @@
 # services/auth_service.py
 from dataclasses import dataclass
 
-from models.UserRepository import UserRepository
+from repository.UserRepository import UserRepository
 from services.unit_of_work import UnitOfWork
 from models.db import SessionLocal
-
+from lib.logger import logger
 @dataclass(frozen=True)
 class AuthResult:
     ok: bool
     message: str = ""
+    role:int=-1
 
 class AuthService:
     """
@@ -18,15 +19,20 @@ class AuthService:
     def __init__(self, valid_user: str = "admin", valid_password: str = "1234"):
         self._user = valid_user
         self._password = valid_password
-
-    def login(self, username: str, password: str) -> AuthResult:
-        
-        with UnitOfWork(SessionLocal) as uow:
-            repo = UserRepository(uow.session)
-            repo.find_by_id(1)
-            uow.commit()
+    def login(self, username: str, password: str) -> AuthResult:                   
         if not username or not password:
-            return AuthResult(False, "Usuario y contraseña son requeridos.")
-        if username == self._user and password == self._password:
-            return AuthResult(True, "Autenticación exitosa.")
-        return AuthResult(False, "Usuario o contraseña incorrectos.")
+            return AuthResult(False, "Usuario o contraseña incorrectos.")
+        with UnitOfWork(SessionLocal) as uow:
+           repo = UserRepository(uow.session)
+           user =  repo.find_by_user_password(username,password)
+           uow.commit() 
+           if user:                           
+               user_name = user.name        
+
+        if user:           
+            logger.info("Usuario: "+username+" password: "+password+" roles: "+str(roles.get(user_name)))
+            return AuthResult(True, user_name,roles.get(user_name))        
+        logger.warning("Error "+username+" "+password)
+        return AuthResult(False, "Usuario y contraseña son requeridos.")
+      
+        

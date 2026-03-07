@@ -5,10 +5,10 @@ from PyQt5.QtWidgets import QMainWindow, QLabel
 class MainView(QMainWindow):
     def __init__(self):
         super().__init__()
-        self.setWindowTitle("Ventana Principal - MVP")
+        self.setWindowTitle("Ventana Principal - MVP :D")
         self.resize(520, 320)
-        self._label = QLabel("Bienvenido, has iniciado sesión correctamente.", alignment=Qt.AlignCenter)
+        self._label = QLabel("Bienvenido adminitración :D, has iniciado sesión correctamente.", alignment=Qt.AlignCenter)
         self.setCentralWidget(self._label)
 
     def set_welcome(self, user: str):
-        self._label.setText(f"Bienvenido, {user}. ¡Sesión iniciada!")
+        self._label.setText(f"Bienvenido adminitración, {user}. ¡Sesión iniciada!")

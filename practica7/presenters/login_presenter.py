@@ -1,6 +1,7 @@
 # presenters/login_presenter.py
 from services.auth_service import AuthService
 from ui.login_view import LoginView
+from models.user import User
 
 class LoginPresenter:
     def __init__(self, view: LoginView, auth: AuthService, on_success):
@@ -13,7 +14,8 @@ class LoginPresenter:
         result = self.auth.login(username, password)
         if result.ok:
             #self.view.show_info(result.message)
-            self.on_success(username)
+            user=User(username)
+            self.on_success(username,user.getRole())
         else:
             self.view.show_error(result.message)
             self.view.clear_password()

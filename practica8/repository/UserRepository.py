@@ -1,5 +1,5 @@
 from typing import List, Optional
-from .User import User
+from models.User import User
 
 class UserRepository:
     """Repositorio específico de Usuario. Recibe una sesión por operación."""
@@ -16,4 +16,11 @@ class UserRepository:
     def create(self, name: str, password: str, email: str ) -> User:
         obj = User(name=name, password=password, email=email)
         self.session.add(obj)
-       
+        
+
+    def find_by_user_password(self, name: str, password: str) -> Optional[User]:
+        return (
+            self.session.query(User)
+            .filter(User.name == name, User.password == password)
+            .first()
+        )
